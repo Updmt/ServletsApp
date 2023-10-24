@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'war'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(libs.mysqlConnectorJ)
+    implementation(libs.hibernateCore)
+    implementation(libs.lombok)
+    annotationProcessor(libs.lombok)
+    implementation(libs.flyway)
+    compileOnly(libs.servlet)
+    implementation(libs.gson)
+}
+
+application {
+    mainClassName = 'org.example.Main'
+}
+
+test {
+    useJUnitPlatform()
+}

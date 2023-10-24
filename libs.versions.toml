@@ -1,0 +1,16 @@
+[versions]
+mysqlConnectorJVer = "8.0.27"
+hibernateCoreVer = "5.6.15.Final"
+lombokVer = "1.18.24"
+flywayVer = "7.7.3"
+servletVer = "6.0.0"
+gsonVer = "2.9.0"
+
+
+[libraries]
+mysqlConnectorJ = { group = "mysql", name = "mysql-connector-java", version.ref = "mysqlConnectorJVer" }
+hibernateCore = { group = "org.hibernate", name = "hibernate-core", version.ref = "hibernateCoreVer"}
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombokVer"}
+flyway = { group = "org.flywaydb", name = "flyway-core", version.ref = "flywayVer"}
+servlet = { group = "jakarta.servlet", name = "jakarta.servlet-api", version.ref = "servletVer" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gsonVer" }
