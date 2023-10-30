@@ -1,15 +1,17 @@
 package org.example.controller;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import org.example.dto.UserDTO;
 import org.example.model.User;
 import org.example.service.UserService;
 import org.example.service.impl.UserServiceImpl;
 
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -17,17 +19,21 @@ import java.util.Objects;
 
 import static org.example.util.Util.getDataFromRequest;
 
-@WebServlet("/user")
-public class UserServlet extends HttpServlet {
+@WebServlet("/api/v1/users")
+public class UserRestControllerV1 extends HttpServlet {
+
+    private final Gson gson = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create();
 
     private final UserService userService = new UserServiceImpl();
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
         String body = getDataFromRequest(req);
-        Gson gson = new Gson();
         Map<String, String> map = gson.fromJson(body, Map.class);
 
         User user = new User();
@@ -35,7 +41,8 @@ public class UserServlet extends HttpServlet {
         user.setLastName(map.get("last_name"));
         userService.save(user);
 
-        String userJson = gson.toJson(user);
+        UserDTO userDTO = UserDTO.fromEntity(user);
+        String userJson = gson.toJson(userDTO);
         resp.getWriter().write(userJson);
     }
 
@@ -43,18 +50,17 @@ public class UserServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
-        Gson gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation()
-                .create();
         String userId = req.getHeader("USER-ID");
 
         if (Objects.nonNull(userId)) {
             User user = userService.get(Long.valueOf(userId));
-            String userJson = gson.toJson(user);
+            UserDTO userDTO = UserDTO.fromEntity(user);
+            String userJson = gson.toJson(userDTO);
             resp.getWriter().write(userJson);
         } else {
             List<User> users = userService.getAll();
-            String userJson = gson.toJson(users);
+            List<UserDTO> userDTOs = UserDTO.fromEntityList(users);
+            String userJson = gson.toJson(userDTOs);
             resp.getWriter().write(userJson);
         }
     }
@@ -64,9 +70,6 @@ public class UserServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         String body = getDataFromRequest(req);
-        Gson gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation()
-                .create();
         Map<String, String> map = gson.fromJson(body, Map.class);
 
         User existingUser = userService.get(Long.valueOf(map.get("id")));
@@ -75,7 +78,8 @@ public class UserServlet extends HttpServlet {
 
         userService.update(existingUser);
 
-        String userJson = gson.toJson(existingUser);
+        UserDTO userDTO = UserDTO.fromEntity(existingUser);
+        String userJson = gson.toJson(userDTO);
         resp.getWriter().write(userJson);
     }
 
@@ -84,15 +88,14 @@ public class UserServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         String body = getDataFromRequest(req);
-        Gson gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation()
-                .create();
         Map<String, String> map = gson.fromJson(body, Map.class);
         String userId = map.get("id");
 
         User user = userService.get(Long.parseLong(userId));
+        UserDTO userDTO = UserDTO.fromEntity(user);
         userService.delete(Long.parseLong(userId));
-        String userJson = gson.toJson(user);
+
+        String userJson = gson.toJson(userDTO);
         resp.getWriter().write(userJson);
     }
 }

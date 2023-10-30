@@ -5,9 +5,9 @@ import org.example.model.File;
 import java.util.List;
 
 public interface FileService {
-    public void save(File file);
-    public File get(Long id);
-    public List<File> getAll();
-    public File update(File file);
-    public void delete(Long id);
+    void save(File file);
+    File get(Long id);
+    List<File> getAll();
+    File update(File file);
+    void delete(Long id);
 }

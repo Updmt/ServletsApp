@@ -18,7 +18,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public File get(Long id) {
-        return fileDao.get(id);
+        return fileDao.getById(id);
     }
 
     @Override
@@ -33,6 +33,6 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void delete(Long id) {
-        fileDao.delete(id);
+        fileDao.deleteById(id);
     }
 }

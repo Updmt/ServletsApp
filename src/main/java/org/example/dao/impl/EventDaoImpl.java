@@ -6,7 +6,6 @@ import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventDaoImpl implements EventDao {
@@ -14,22 +13,10 @@ public class EventDaoImpl implements EventDao {
     Transaction transaction = null;
 
     @Override
-    public void save(Event event) {
+    public Event save(Event event) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.save(event);
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-        }
-    }
-
-    @Override
-    public Event get(Long id) {
-        Event event = new Event();
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            event = session.get(Event.class, id);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
@@ -38,15 +25,27 @@ public class EventDaoImpl implements EventDao {
     }
 
     @Override
-    public List<Event> getAll() {
-        List<Event> events = new ArrayList<>();
+    public Event update(Event event) {
+        return null;
+    }
+
+    @Override
+    public void deleteById(Long aLong) {
+    }
+
+    @Override
+    public Event getById(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            events = session.createQuery("from Event").list();
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
+            return (Event) session.createQuery("FROM Event e LEFT JOIN FETCH e.file WHERE e.id = :id")
+                    .setParameter("id", id)
+                    .getSingleResult();
         }
-        return events;
+    }
+
+    @Override
+    public List<Event> getAll() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Event e LEFT JOIN FETCH e.file").list();
+        }
     }
 }

@@ -16,7 +16,7 @@ public class FileDaoImpl implements FileDao {
     Transaction transaction = null;
 
     @Override
-    public void save(File file) {
+    public File save(File file) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.save(file);
@@ -24,10 +24,11 @@ public class FileDaoImpl implements FileDao {
         } catch (Exception e) {
             transaction.rollback();
         }
+        return file;
     }
 
     @Override
-    public File get(Long id) {
+    public File getById(Long id) {
         File file = new File();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -54,36 +55,10 @@ public class FileDaoImpl implements FileDao {
 
     @Override
     public File update(File file) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            session.update(file);
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-        }
-        return file;
+        return null;
     }
 
     @Override
-    public void delete(Long id) {
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            File file = session.get(File.class, id);
-
-            if (Objects.nonNull(file)) {
-                Event event = file.getEvent();
-                if (Objects.nonNull(event)) {
-                    event.setFile(null);
-                }
-                session.delete(file);
-                transaction.commit();
-            }
-        } catch (Exception e) {
-            if (Objects.nonNull(transaction)) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
+    public void deleteById(Long id) {
     }
 }

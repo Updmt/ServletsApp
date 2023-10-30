@@ -9,7 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
-@Table(name = "User")
+@Table(name = "users")
 @Entity
 @Getter
 @Setter
@@ -20,18 +20,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @Expose
     private Long id;
 
     @Column(name = "first_name")
-    @Expose
     private String firstName;
 
     @Column(name = "last_name")
-    @Expose
     private String lastName;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Expose
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Event> events;
 }

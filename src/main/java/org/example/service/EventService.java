@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface EventService {
 
-    public void save(Event file);
-    public Event get(Long id);
-    public List<Event> getAll();
+    void save(Event file);
+    Event get(Long id);
+    List<Event> getAll();
 }

@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Table(name = "File")
+@Table(name = "files")
 @Entity
 @Getter
 @Setter
@@ -15,13 +15,14 @@ public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @Expose
     private Long id;
 
     @Column(name = "text")
-    @Expose
     private String text;
 
-    @OneToOne(mappedBy = "file", fetch = FetchType.EAGER)
+    @Column(name = "file_name")
+    private String fileName;
+
+    @OneToOne(mappedBy = "file", fetch = FetchType.LAZY)
     private Event event;
 }

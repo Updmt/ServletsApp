@@ -1,5 +1,7 @@
 package org.example.service.impl;
 
+import org.example.constants.Constants;
+import org.example.dto.FileDTO;
 import org.example.model.Event;
 import org.example.model.File;
 import org.example.model.User;
@@ -17,11 +19,12 @@ public class UserManagementService {
     private final FileService fileService = new FileServiceImpl();
 
 
-    public File createFileAndEvent(Long userId, String text) {
+    public File createFileAndEvent(Long userId, String text, String fileName) {
         User user = userService.get(userId);
 
         File file = new File();
         file.setText(text);
+        file.setFileName(fileName);
 
         Event event = new Event();
         event.setCreatedAt(Instant.now().toString());
@@ -33,10 +36,15 @@ public class UserManagementService {
         return file;
     }
 
-    public List<File> getAllFilesFromUser(Long userId) {
+    public List<FileDTO> getAllFilesDTOFromUser(Long userId) {
         User user = userService.get(userId);
         List<Event> userEventList = user.getEvents();
-        return userEventList.stream().map(Event::getFile).toList();
+        List<File> fileList = userEventList.stream()
+                .map(Event::getFile)
+                .toList();
+        return fileList.stream()
+                .map(FileDTO::fromEntity)
+                .toList();
     }
 
     public List<Event> getAllEventsFromUser(Long userId) {

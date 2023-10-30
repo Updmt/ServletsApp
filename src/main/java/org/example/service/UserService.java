@@ -5,9 +5,9 @@ import org.example.model.User;
 import java.util.List;
 
 public interface UserService {
-    public void save(User user);
-    public User get(Long id);
-    public List<User> getAll();
-    public User update(User user);
-    public void delete(Long id);
+    void save(User user);
+    User get(Long id);
+    List<User> getAll();
+    User update(User user);
+    void delete(Long id);
 }

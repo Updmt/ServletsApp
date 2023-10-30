@@ -6,7 +6,6 @@ import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,22 +14,10 @@ public class UserDaoImpl implements UserDao {
     Transaction transaction = null;
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.save(user);
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-        }
-    }
-
-    @Override
-    public User get(Long id) {
-        User user = new User();
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            user = session.get(User.class, id);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
@@ -39,16 +26,20 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAll() {
-        List<User> users = new ArrayList<>();
+    public User getById(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            users = session.createQuery("from User").list();
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
+            return (User) session.createQuery("FROM User u LEFT JOIN FETCH u.events WHERE u.id = :userId")
+                    .setParameter("userId", id)
+                    .getSingleResult();
         }
-        return users;
+    }
+
+    @Override
+    public List<User> getAll() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM User u LEFT JOIN FETCH u.events")
+                    .list();
+        }
     }
 
     @Override
@@ -64,7 +55,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             User user = session.get(User.class, id);

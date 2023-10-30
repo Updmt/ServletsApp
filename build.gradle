@@ -19,6 +19,11 @@ dependencies {
     implementation(libs.flyway)
     compileOnly(libs.servlet)
     implementation(libs.gson)
+    implementation(libs.fileupload)
+    implementation(libs.jacksonDatabind)
+    testImplementation(libs.junit5Api)
+    testRuntimeOnly(libs.junit5Engine)
+    testImplementation(libs.assertjCore)
 }
 
 application {

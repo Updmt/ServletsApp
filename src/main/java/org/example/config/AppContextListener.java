@@ -1,9 +1,10 @@
 package org.example.config;
 
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.annotation.WebListener;
 import org.flywaydb.core.Flyway;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 @WebListener
 public class AppContextListener implements ServletContextListener {
@@ -15,5 +16,10 @@ public class AppContextListener implements ServletContextListener {
                 .locations("classpath:db/migration")
                 .load();
         flyway.migrate();
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+
     }
 }
