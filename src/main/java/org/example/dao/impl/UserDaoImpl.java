@@ -28,7 +28,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getById(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return (User) session.createQuery("FROM User u LEFT JOIN FETCH u.events WHERE u.id = :userId")
+            return (User) session.createQuery("FROM User u LEFT JOIN FETCH u.events e LEFT JOIN FETCH e.file WHERE u.id = :userId")
                     .setParameter("userId", id)
                     .getSingleResult();
         }
@@ -37,7 +37,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM User u LEFT JOIN FETCH u.events")
+            return session.createQuery("FROM User u LEFT JOIN FETCH u.events e LEFT JOIN FETCH e.file")
                     .list();
         }
     }
