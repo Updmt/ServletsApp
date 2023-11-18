@@ -3,6 +3,7 @@ package org.example.controller;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.example.dao.impl.UserDaoImpl;
 import org.example.dto.UserDTO;
 import org.example.model.User;
 import org.example.service.UserService;
@@ -26,9 +27,14 @@ public class UserRestControllerV1 extends HttpServlet {
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create();
 
-    private final UserService userService = new UserServiceImpl();
+    private UserService userService;
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    @Override
+    public void init() {
+        userService = new UserServiceImpl(new UserDaoImpl());
+    }
+
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
@@ -46,7 +52,7 @@ public class UserRestControllerV1 extends HttpServlet {
         resp.getWriter().write(userJson);
     }
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
@@ -65,7 +71,7 @@ public class UserRestControllerV1 extends HttpServlet {
         }
     }
 
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
@@ -83,7 +89,7 @@ public class UserRestControllerV1 extends HttpServlet {
         resp.getWriter().write(userJson);
     }
 
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 

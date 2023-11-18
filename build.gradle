@@ -18,12 +18,16 @@ dependencies {
     annotationProcessor(libs.lombok)
     implementation(libs.flyway)
     compileOnly(libs.servlet)
+    testImplementation(libs.servlet)
     implementation(libs.gson)
     implementation(libs.fileupload)
     implementation(libs.jacksonDatabind)
     testImplementation(libs.junit5Api)
     testRuntimeOnly(libs.junit5Engine)
     testImplementation(libs.assertjCore)
+    testImplementation(libs.mockitoCore)
+    testImplementation(libs.mockitoJUnitJupiter)
+    testImplementation(libs.mockitoInline)
 }
 
 application {

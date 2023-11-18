@@ -9,11 +9,15 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao = new UserDaoImpl();
+    private final UserDao userDao;
+
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
-    public void save(User user) {
-        userDao.save(user);
+    public User save(User user) {
+        return userDao.save(user);
     }
 
     @Override

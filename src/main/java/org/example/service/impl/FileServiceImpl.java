@@ -1,7 +1,6 @@
 package org.example.service.impl;
 
 import org.example.dao.FileDao;
-import org.example.dao.impl.FileDaoImpl;
 import org.example.model.File;
 import org.example.service.FileService;
 
@@ -9,11 +8,15 @@ import java.util.List;
 
 public class FileServiceImpl implements FileService {
 
-    private final FileDao fileDao = new FileDaoImpl();
+    private final FileDao fileDao;
+
+    public FileServiceImpl(FileDao fileDao) {
+        this.fileDao = fileDao;
+    }
 
     @Override
-    public void save(File file) {
-        fileDao.save(file);
+    public File save(File file) {
+        return fileDao.save(file);
     }
 
     @Override

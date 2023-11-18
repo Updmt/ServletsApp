@@ -1,6 +1,8 @@
 package org.example.service.impl;
 
-import org.example.constants.Constants;
+import org.example.dao.impl.EventDaoImpl;
+import org.example.dao.impl.FileDaoImpl;
+import org.example.dao.impl.UserDaoImpl;
 import org.example.dto.FileDTO;
 import org.example.model.Event;
 import org.example.model.File;
@@ -14,9 +16,9 @@ import java.util.List;
 
 public class UserManagementService {
 
-    private final UserService userService = new UserServiceImpl();
-    private final EventService eventService = new EventServiceImpl();
-    private final FileService fileService = new FileServiceImpl();
+    private final UserService userService = new UserServiceImpl(new UserDaoImpl());
+    private final EventService eventService = new EventServiceImpl(new EventDaoImpl());
+    private final FileService fileService = new FileServiceImpl(new FileDaoImpl());
 
 
     public File createFileAndEvent(Long userId, String text, String fileName) {

@@ -1,8 +1,6 @@
 package org.example.model;
 
-import com.google.gson.annotations.Expose;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,6 +8,9 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public class Event {
 
     @Id

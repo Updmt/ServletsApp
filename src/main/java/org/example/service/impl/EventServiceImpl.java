@@ -1,7 +1,6 @@
 package org.example.service.impl;
 
 import org.example.dao.EventDao;
-import org.example.dao.impl.EventDaoImpl;
 import org.example.model.Event;
 import org.example.service.EventService;
 
@@ -9,11 +8,15 @@ import java.util.List;
 
 public class EventServiceImpl implements EventService {
 
-    EventDao eventDao = new EventDaoImpl();
+    private final EventDao eventDao;
+
+    public EventServiceImpl(EventDao eventDao) {
+        this.eventDao = eventDao;
+    }
 
     @Override
-    public void save(Event event) {
-        eventDao.save(event);
+    public Event save(Event event) {
+        return eventDao.save(event);
     }
 
     @Override

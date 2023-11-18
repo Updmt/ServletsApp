@@ -3,6 +3,7 @@ package org.example.controller;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.example.dao.impl.EventDaoImpl;
 import org.example.dto.EventDTO;
 import org.example.model.Event;
 import org.example.service.EventService;
@@ -28,10 +29,16 @@ public class EventRestControllerV1 extends HttpServlet {
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create();
 
-    private final UserManagementService userManagementService = new UserManagementService();
-    private final EventService eventService = new EventServiceImpl();
+    private UserManagementService userManagementService;
+    private EventService eventService;
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    @Override
+    public void init() {
+        userManagementService = new UserManagementService();
+        eventService = new EventServiceImpl(new EventDaoImpl());
+    }
+
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 

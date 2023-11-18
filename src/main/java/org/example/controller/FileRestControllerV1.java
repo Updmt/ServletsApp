@@ -9,9 +9,12 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.example.constants.Constants;
+import org.example.dao.impl.EventDaoImpl;
+import org.example.dao.impl.FileDaoImpl;
 import org.example.dto.FileDTO;
 import org.example.model.File;
 import org.example.service.*;
+import org.example.service.impl.EventServiceImpl;
 import org.example.service.impl.FileServiceImpl;
 import org.example.service.impl.UserManagementService;
 
@@ -34,10 +37,16 @@ public class FileRestControllerV1 extends HttpServlet {
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create();
 
-    private final UserManagementService userManagementService = new UserManagementService();
-    private final FileService fileService = new FileServiceImpl();
+    private UserManagementService userManagementService;
+    private FileService fileService;
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    @Override
+    public void init() {
+        userManagementService = new UserManagementService();
+        fileService = new FileServiceImpl(new FileDaoImpl());
+    }
+
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
@@ -78,7 +87,7 @@ public class FileRestControllerV1 extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
